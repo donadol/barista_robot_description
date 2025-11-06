@@ -38,7 +38,8 @@ def generate_launch_description():
             output='screen',
             name='rviz_node',
             parameters=[{'use_sim_time': True}],
-            #arguments=['-d', rviz_config_dir])
+            #arguments=['-d', rviz_config_dir]
+    )
 
     # create and return launch description object
     return LaunchDescription(
