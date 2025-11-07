@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- Xacro properties for cup holder tray dimensions -->
+  <xacro:property name="tray_radius" value="0.16"/>
+  <xacro:property name="tray_height" value="0.09"/>
+  <xacro:property name="tray_mass" value="2.0"/>
+
+  <!-- Cup Holder Tray Macro -->
+  <xacro:macro name="cup_holder_tray" params="parent_link *origin">
+
+    <!-- Cup Holder Tray Link -->
+    <link name="cup_holder_tray">
+      <visual>
+        <origin xyz="0 0 ${tray_height/2}" rpy="0 0 0"/>
+        <geometry>
+          <cylinder radius="${tray_radius}" length="${tray_height}"/>
+        </geometry>
+        <material name="blue"/>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 ${tray_height/2}" rpy="0 0 0"/>
+        <geometry>
+          <cylinder radius="${tray_radius}" length="${tray_height}"/>
+        </geometry>
+      </collision>
+
+      <inertial>
+        <origin xyz="0 0 ${tray_height/2}" rpy="0 0 0"/>
+        <mass value="${tray_mass}"/>
+        <!-- Cylinder inertia: Ixx = Iyy = (1/12)*m*(3*r^2 + h^2), Izz = (1/2)*m*r^2 -->
+        <inertia
+          ixx="${(1/12) * tray_mass * (3 * tray_radius * tray_radius + tray_height * tray_height)}"
+          ixy="0.0"
+          ixz="0.0"
+          iyy="${(1/12) * tray_mass * (3 * tray_radius * tray_radius + tray_height * tray_height)}"
+          iyz="0.0"
+          izz="${(1/2) * tray_mass * tray_radius * tray_radius}"/>
+      </inertial>
+    </link>
+
+    <!-- Tray Joint -->
+    <joint name="tray_joint" type="fixed">
+      <parent link="${parent_link}"/>
+      <child link="cup_holder_tray"/>
+      <xacro:insert_block name="origin"/>
+    </joint>
+
+    <!-- Gazebo Properties -->
+    <gazebo reference="cup_holder_tray">
+      <material>Gazebo/Blue</material>
+    </gazebo>
+
+  </xacro:macro>
+
+</robot>
