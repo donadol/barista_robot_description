@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- Xacro properties for laser scanner -->
+  <xacro:property name="laser_mass" value="0.16"/>
+  <xacro:property name="laser_box_x" value="0.05"/>
+  <xacro:property name="laser_box_y" value="0.05"/>
+  <xacro:property name="laser_box_z" value="0.07"/>
+
+  <!-- Laser Scanner Macro -->
+  <xacro:macro name="laser_scanner" params="parent_link *origin">
+
+    <!-- Laser Scanner Link -->
+    <link name="laser_scanner">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://barista_robot_description/meshes/hokuyo_urg_04lx.dae" scale="1.0 1.0 1.0"/>
+        </geometry>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <box size="${laser_box_x} ${laser_box_y} ${laser_box_z}"/>
+        </geometry>
+      </collision>
+
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="${laser_mass}"/>
+        <!-- Box inertia: Ixx = (1/12)*m*(y^2 + z^2), Iyy = (1/12)*m*(x^2 + z^2), Izz = (1/12)*m*(x^2 + y^2) -->
+        <inertia
+          ixx="${(1/12) * laser_mass * (laser_box_y * laser_box_y + laser_box_z * laser_box_z)}"
+          ixy="0.0"
+          ixz="0.0"
+          iyy="${(1/12) * laser_mass * (laser_box_x * laser_box_x + laser_box_z * laser_box_z)}"
+          iyz="0.0"
+          izz="${(1/12) * laser_mass * (laser_box_x * laser_box_x + laser_box_y * laser_box_y)}"/>
+      </inertial>
+    </link>
+
+    <!-- Laser Scanner Joint -->
+    <joint name="laser_scanner_joint" type="fixed">
+      <xacro:insert_block name="origin"/>
+      <parent link="${parent_link}"/>
+      <child link="laser_scanner"/>
+    </joint>
+
+    <!-- Laser Scanner Frame Link -->
+    <link name="laser_scanner_frame">
+    </link>
+
+    <!-- Laser Scanner Frame Joint -->
+    <joint name="laser_scanner_frame_joint" type="fixed">
+      <origin xyz="0 0 0.06" rpy="0 0 0"/>
+      <parent link="laser_scanner"/>
+      <child link="laser_scanner_frame"/>
+    </joint>
+
+    <!-- Gazebo Properties -->
+    <gazebo reference="laser_scanner">
+      <material>Gazebo/Gray</material>
+    </gazebo>
+
+    <!-- Laser Scan Sensor Plugin -->
+    <gazebo reference="laser_scanner_frame">
+      <sensor name="laser_ray" type="ray">
+        <pose>0 0 0 0 0 0</pose>
+        <ray>
+          <scan>
+            <horizontal>
+              <samples>200</samples>
+              <resolution>1.0</resolution>
+              <min_angle>-1.570795</min_angle>
+              <max_angle>1.570795</max_angle>
+            </horizontal>
+          </scan>
+          <range>
+            <min>0.1</min>
+            <max>5.0</max>
+          </range>
+        </ray>
+        <always_on>true</always_on>
+        <visualize>true</visualize>
+        <update_rate>100.0</update_rate>
+        <plugin name="laser" filename="libgazebo_ros_ray_sensor.so">
+          <ros>
+            <remapping>~/out:=scan</remapping>
+          </ros>
+          <output_type>sensor_msgs/LaserScan</output_type>
+          <frame_name>laser_scanner_frame</frame_name>
+        </plugin>
+      </sensor>
+    </gazebo>
+
+  </xacro:macro>
+
+</robot>
