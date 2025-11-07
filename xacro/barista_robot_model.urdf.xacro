@@ -110,7 +110,7 @@
   </xacro:cup_holder_tray>
 
   <!-- Laser Scanner (conditional) -->
-  <xacro:if value="$(include_laser)">
+  <xacro:if value="$(arg include_laser)">
     <xacro:laser_scanner parent_link="base_link">
       <origin xyz="0.12 0.0 0.0775" rpy="0 0 0"/>
     </xacro:laser_scanner>

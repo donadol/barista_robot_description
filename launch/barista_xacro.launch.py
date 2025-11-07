@@ -3,11 +3,12 @@ import os
 from ament_index_python.packages import get_package_share_directory
 from ament_index_python.packages import get_package_prefix
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument
+from launch.actions import DeclareLaunchArgument, TimerAction
 from launch.actions import IncludeLaunchDescription
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import Command, LaunchConfiguration
 from launch_ros.actions import Node
+from launch_ros.parameter_descriptions import ParameterValue
 
 import xacro
 
@@ -51,7 +52,7 @@ def generate_launch_description():
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
             os.path.join(pkg_gazebo_ros, 'launch'), '/gazebo.launch.py']),
-        launch_arguments={"verbose": "false", 'pause': 'true'}.items(),
+        launch_arguments={"verbose": "false"}.items(),
     )
 
     # Robot State Publisher with xacro processing
@@ -62,7 +63,10 @@ def generate_launch_description():
         emulate_tty=True,
         parameters=[{
             'use_sim_time': True,
-            'robot_description': Command(['xacro ', robot_desc_path, ' include_laser:=', LaunchConfiguration('include_laser')])
+            'robot_description': ParameterValue(
+                Command(['xacro ', robot_desc_path, ' include_laser:=', LaunchConfiguration('include_laser')]),
+                value_type=str
+            )
         }],
         output="screen"
     )
@@ -77,7 +81,7 @@ def generate_launch_description():
             '-entity', 'barista_robot',
             '-x', '0.0',
             '-y', '0.0',
-            '-z', '0.2',
+            '-z', '0.05',
             '-R', '0.0',
             '-P', '0.0',
             '-Y', '0.0',
@@ -95,6 +99,17 @@ def generate_launch_description():
         arguments=['-d', rviz_config_dir]
     )
 
+    # Delay spawn and RViz to give robot_state_publisher time to start
+    delayed_spawn_robot = TimerAction(
+        period=2.0,
+        actions=[spawn_robot]
+    )
+
+    delayed_rviz = TimerAction(
+        period=3.0,
+        actions=[rviz_node]
+    )
+
     # Create and return launch description
     return LaunchDescription([
         include_laser_arg,
@@ -105,6 +120,6 @@ def generate_launch_description():
         ),
         gazebo,
         robot_state_publisher_node,
-        spawn_robot,
-        rviz_node
+        delayed_spawn_robot,
+        delayed_rviz
     ])
