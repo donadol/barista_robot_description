@@ -66,10 +66,7 @@ def generate_launch_description():
         parameters=[{
             'frame_prefix': robot_name_1 + '/',
             'use_sim_time': True,
-            'robot_description': ParameterValue(
-                Command(['xacro ', robot_desc_path, ' include_laser:=', LaunchConfiguration('include_laser'), ' robot_name:=', robot_name_1]),
-                value_type=str
-            )
+            'robot_description': Command(['xacro ', robot_desc_path, ' include_laser:=', LaunchConfiguration('include_laser'), ' robot_name:=', robot_name_1]),
         }],
         output="screen"
     )
@@ -84,10 +81,7 @@ def generate_launch_description():
         parameters=[{
             'frame_prefix': robot_name_2 + '/',
             'use_sim_time': True,
-            'robot_description': ParameterValue(
-                Command(['xacro ', robot_desc_path, ' include_laser:=', LaunchConfiguration('include_laser'), ' robot_name:=', robot_name_2]),
-                value_type=str
-            )
+            'robot_description': Command(['xacro ', robot_desc_path, ' include_laser:=', LaunchConfiguration('include_laser'), ' robot_name:=', robot_name_2]),
         }],
         output="screen"
     )
@@ -161,17 +155,17 @@ def generate_launch_description():
 
     # Delay spawn and RViz to give robot_state_publisher time to start
     delayed_spawn_robot1 = TimerAction(
-        period=2.0,
+        period=4.0,
         actions=[spawn_robot1]
     )
 
     delayed_spawn_robot2 = TimerAction(
-        period=2.5,
+        period=4.0,
         actions=[spawn_robot2]
     )
 
     delayed_rviz = TimerAction(
-        period=4.0,
+        period=5.0,
         actions=[rviz_node]
     )
 

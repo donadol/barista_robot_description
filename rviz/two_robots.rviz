@@ -297,7 +297,7 @@ Visualization Manager:
         Inertia: false
         Mass: false
       Name: RickRobotModel
-      TF Prefix: ""
+      TF Prefix: rick
       Update Interval: 0
       Value: true
       Visual Enabled: true
@@ -406,7 +406,7 @@ Visualization Manager:
         Inertia: false
         Mass: false
       Name: MortyRobotModel
-      TF Prefix: ""
+      TF Prefix: morty
       Update Interval: 0
       Value: true
       Visual Enabled: true
