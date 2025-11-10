@@ -5,6 +5,7 @@
   <xacro:arg name="include_laser" default="true"/>
 
   <!-- Argument for robot name -->
+  <xacro:arg name="robot_name" default="rick"/>
   <xacro:property name="robot_name" value="$(arg robot_name)"/>
 
   <!-- Include all macro files -->
@@ -120,7 +121,7 @@
   </xacro:standoff_rod>
 
   <!-- Cup Holder Tray -->
-  <xacro:cup_holder_tray parent_link="base_link">
+  <xacro:cup_holder_tray parent_link="base_link" robot_color="${robot_color}" gazebo_color="${gazebo_color}">
     <origin xyz="0 0 0.2975" rpy="0 0 0"/>
   </xacro:cup_holder_tray>
 

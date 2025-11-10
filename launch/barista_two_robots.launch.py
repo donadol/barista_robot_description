@@ -60,7 +60,7 @@ def generate_launch_description():
     robot_state_publisher_robot1 = Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
-        name='robot_state_publisher',
+        name='robot_state_publisher_' + robot_name_1,
         namespace=robot_name_1,
         emulate_tty=True,
         parameters=[{
@@ -78,7 +78,7 @@ def generate_launch_description():
     robot_state_publisher_robot2 = Node(
         package='robot_state_publisher',
         executable='robot_state_publisher',
-        name='robot_state_publisher',
+        name='robot_state_publisher_' + robot_name_2,
         namespace=robot_name_2,
         emulate_tty=True,
         parameters=[{
@@ -143,7 +143,7 @@ def generate_launch_description():
         executable='static_transform_publisher',
         name='static_tf_world_to_'+ robot_name_2,
         output='screen',
-        arguments=['1.0', '1.0', '0', '0', '0', '0', 'world', robot_name_2+'/odom']
+        arguments=['0.0', '0.0', '0', '0', '0', '0', 'world', robot_name_2 + '/odom']
     )
 
     # RViz configuration

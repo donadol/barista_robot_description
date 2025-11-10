@@ -7,7 +7,7 @@
   <xacro:property name="tray_mass" value="2.0"/>
 
   <!-- Cup Holder Tray Macro -->
-  <xacro:macro name="cup_holder_tray" params="parent_link *origin">
+  <xacro:macro name="cup_holder_tray" params="parent_link robot_color gazebo_color *origin">
 
     <!-- Cup Holder Tray Link -->
     <link name="cup_holder_tray">
@@ -16,7 +16,7 @@
         <geometry>
           <cylinder radius="${tray_radius}" length="${tray_height}"/>
         </geometry>
-        <material name="blue"/>
+        <material name="${robot_color}"/>
       </visual>
 
       <collision>
@@ -30,13 +30,7 @@
         <origin xyz="0 0 ${tray_height/2}" rpy="0 0 0"/>
         <mass value="${tray_mass}"/>
         <!-- Cylinder inertia: Ixx = Iyy = (1/12)*m*(3*r^2 + h^2), Izz = (1/2)*m*r^2 -->
-        <inertia
-          ixx="${(1/12) * tray_mass * (3 * tray_radius * tray_radius + tray_height * tray_height)}"
-          ixy="0.0"
-          ixz="0.0"
-          iyy="${(1/12) * tray_mass * (3 * tray_radius * tray_radius + tray_height * tray_height)}"
-          iyz="0.0"
-          izz="${(1/2) * tray_mass * tray_radius * tray_radius}"/>
+        <inertia ixx="${(1/12) * tray_mass * (3 * tray_radius * tray_radius + tray_height * tray_height)}" ixy="0.0" ixz="0.0" iyy="${(1/12) * tray_mass * (3 * tray_radius * tray_radius + tray_height * tray_height)}" iyz="0.0" izz="${(1/2) * tray_mass * tray_radius * tray_radius}"/>
       </inertial>
     </link>
 
@@ -49,7 +43,7 @@
 
     <!-- Gazebo Properties -->
     <gazebo reference="cup_holder_tray">
-      <material>Gazebo/Blue</material>
+      <material>${gazebo_color}</material>
     </gazebo>
 
   </xacro:macro>
