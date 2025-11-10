@@ -39,10 +39,12 @@
   <xacro:if value="${robot_name == 'rick'}">
     <xacro:property name="robot_color" value="red"/>
     <xacro:property name="gazebo_color" value="Gazebo/Red"/>
+    <xacro:property name="laser_color" value="Gazebo/Red"/>
   </xacro:if>
   <xacro:unless value="${robot_name == 'rick'}">
     <xacro:property name="robot_color" value="blue"/>
     <xacro:property name="gazebo_color" value="Gazebo/Blue"/>
+    <xacro:property name="laser_color" value="Gazebo/Blue"/>
   </xacro:unless>
 
   <!-- Base Footprint Link -->
@@ -124,7 +126,7 @@
 
   <!-- Laser Scanner (conditional) -->
   <xacro:if value="$(arg include_laser)">
-    <xacro:laser_scanner parent_link="base_link" robot_name="${robot_name}">
+    <xacro:laser_scanner parent_link="base_link" robot_name="${robot_name}" laser_color="${laser_color}">
       <origin xyz="0.12 0.0 0.0775" rpy="0 0 0"/>
     </xacro:laser_scanner>
   </xacro:if>
