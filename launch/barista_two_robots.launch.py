@@ -161,12 +161,12 @@ def generate_launch_description():
 
     # Delay spawn and RViz to give robot_state_publisher time to start
     delayed_spawn_robot1 = TimerAction(
-        period=4.0,
+        period=5.0,
         actions=[spawn_robot1]
     )
 
     delayed_spawn_robot2 = TimerAction(
-        period=4.0,
+        period=5.0,
         actions=[spawn_robot2]
     )
 
