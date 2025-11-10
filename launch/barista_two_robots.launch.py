@@ -66,7 +66,10 @@ def generate_launch_description():
         parameters=[{
             'frame_prefix': robot_name_1 + '/',
             'use_sim_time': True,
-            'robot_description': Command(['xacro ', robot_desc_path, ' include_laser:=', LaunchConfiguration('include_laser'), ' robot_name:=', robot_name_1]),
+            'robot_description': ParameterValue(
+                Command(['xacro ', robot_desc_path, ' include_laser:=', LaunchConfiguration('include_laser'), ' robot_name:=', robot_name_1]),
+                value_type=str
+            )
         }],
         output="screen"
     )
@@ -81,7 +84,10 @@ def generate_launch_description():
         parameters=[{
             'frame_prefix': robot_name_2 + '/',
             'use_sim_time': True,
-            'robot_description': Command(['xacro ', robot_desc_path, ' include_laser:=', LaunchConfiguration('include_laser'), ' robot_name:=', robot_name_2]),
+            'robot_description': ParameterValue(
+                Command(['xacro ', robot_desc_path, ' include_laser:=', LaunchConfiguration('include_laser'), ' robot_name:=', robot_name_2]),
+                value_type=str
+            )
         }],
         output="screen"
     )
