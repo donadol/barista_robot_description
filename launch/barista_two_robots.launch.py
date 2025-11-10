@@ -45,9 +45,6 @@ def generate_launch_description():
     print("Fetching XACRO ==>")
     robot_desc_path = os.path.join(pkg_barista_description, "xacro", xacro_file)
 
-    # RViz configuration
-    rviz_config_dir = os.path.join(pkg_barista_description, 'rviz', 'urdf_vis.rviz')
-
     # Gazebo launch
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
@@ -131,6 +128,27 @@ def generate_launch_description():
         ]
     )
 
+    # Static transform from world to rick/odom
+    static_tf_world_to_rick = Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        name='static_tf_world_to_'+ robot_name_1,
+        output='screen',
+        arguments=['0', '0', '0', '0', '0', '0', 'world', robot_name_1+'/odom']
+    )
+
+    # Static transform from world to morty/odom
+    static_tf_world_to_morty = Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        name='static_tf_world_to_'+ robot_name_2,
+        output='screen',
+        arguments=['1.0', '1.0', '0', '0', '0', '0', 'world', robot_name_2+'/odom']
+    )
+
+    # RViz configuration
+    rviz_config_dir = os.path.join(pkg_barista_description, 'rviz', 'two_robots.rviz')
+
     # RViz node
     rviz_node = Node(
         package='rviz2',
@@ -168,6 +186,8 @@ def generate_launch_description():
         gazebo,
         robot_state_publisher_robot1,
         robot_state_publisher_robot2,
+        static_tf_world_to_rick,
+        static_tf_world_to_morty,
         delayed_spawn_robot1,
         delayed_spawn_robot2,
         delayed_rviz
